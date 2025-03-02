@@ -1,53 +1,107 @@
 #!/bin/bash
 
-# Guard gegen mehrfaches Laden
+# Import version
+IMPORTS_VERSION="1.1.0"
+
+# Guard against multiple loading
 if [ -n "${_IMPORTS_LOADED+x}" ]; then
     return 0
 fi
 _IMPORTS_LOADED=1
 
-# Zuerst script-header laden (enthält DOCKER_SCRIPTS_DIR)
-source "${DOCKER_SCRIPTS_DIR}/lib/core/script-header.sh"
+# Load script header first (contains DOCKER_SCRIPTS_DIR)
+if ! source "${DOCKER_SCRIPTS_DIR}/lib/core/script-header.sh"; then
+    echo "ERROR: Failed to load script-header.sh" >&2
+    exit 1
+fi
 
-# Dann die Core-Module
-source "${DOCKER_SCRIPTS_DIR}/lib/core/containers.sh"
-source "${DOCKER_SCRIPTS_DIR}/lib/core/path.sh"
+# Import logging functions
+source "${DOCKER_SCRIPTS_DIR}/lib/utils/format/output.sh"
 
-# Utils - Format (brauchen wir für Ausgaben)
-source "${DOCKER_LIB_DIR}/utils/format/colors.sh"
-source "${DOCKER_LIB_DIR}/utils/format/output.sh"
+# Core modules
+CORE_MODULES=(
+    "containers.sh"
+    "path.sh"
+)
 
-# Utils - Input
-source "${DOCKER_LIB_DIR}/utils/input/prompt.sh"
-source "${DOCKER_LIB_DIR}/utils/input/validation.sh"
+for module in "${CORE_MODULES[@]}"; do
+    if ! source "${DOCKER_SCRIPTS_DIR}/lib/core/${module}"; then
+        print_status "Failed to load core module: ${module}" "error"
+        exit 1
+    fi
+done
 
-# Utils - Security
-source "${DOCKER_LIB_DIR}/utils/security/credentials.sh"
-source "${DOCKER_LIB_DIR}/utils/security/crypto.sh"
-source "${DOCKER_LIB_DIR}/utils/security/hash.sh"
-source "${DOCKER_LIB_DIR}/utils/security/credentials-manager.sh"
+# Utility modules
+UTILS=(
+    "format/colors.sh"
+    "input/prompt.sh"
+    "input/validation.sh"
+    "system/file.sh"
+    "system/user.sh"
+    "system/string.sh"
+)
 
-# Utils - System
-source "${DOCKER_LIB_DIR}/utils/system/file.sh"
-source "${DOCKER_LIB_DIR}/utils/system/user.sh"
-source "${DOCKER_LIB_DIR}/utils/system/string.sh"
+for util in "${UTILS[@]}"; do
+    if ! source "${DOCKER_SCRIPTS_DIR}/lib/utils/${util}"; then
+        print_status "Failed to load utility: ${util}" "error"
+        exit 1
+    fi
+done
 
-# Services
-source "${DOCKER_LIB_DIR}/services/docker.sh"
-source "${DOCKER_LIB_DIR}/services/init-gateway.sh"
-source "${DOCKER_LIB_DIR}/services/init-services.sh"
-source "${DOCKER_LIB_DIR}/services/permissions.sh"
+# Security modules
+SECURITY_MODULES=(
+    "credentials.sh"
+    "crypto.sh"
+    "hash.sh"
+    "credentials-manager.sh"
+)
 
-# DNS
-source "${DOCKER_LIB_DIR}/dns/dns-setup.sh"
-source "${DOCKER_LIB_DIR}/dns/dns-providers-list.sh"
-source "${DOCKER_LIB_DIR}/dns/dns-provider-select.sh"
-source "${DOCKER_LIB_DIR}/dns/dns-companion-manager.sh"
+for module in "${SECURITY_MODULES[@]}"; do
+    if ! source "${DOCKER_SCRIPTS_DIR}/modules/security/${module}"; then
+        print_status "Failed to load security module: ${module}" "error"
+        exit 1
+    fi
+done
 
+# Service modules
+SERVICE_MODULES=(
+    "docker.sh"
+    "init-gateway.sh"
+    "init-services.sh"
+    "permissions.sh"
+)
 
-# Network utilities
-source "${DOCKER_LIB_DIR}/utils/network/router.sh"
-source "${DOCKER_LIB_DIR}/utils/network/ports.sh"
+for module in "${SERVICE_MODULES[@]}"; do
+    if ! source "${DOCKER_SCRIPTS_DIR}/modules/services/${module}"; then
+        print_status "Failed to load service module: ${module}" "error"
+        exit 1
+    fi
+done
+
+# Network modules
+NETWORK_MODULES=(
+    "dns/dns-setup.sh"
+    "dns/dns-providers-list.sh"
+    "dns/dns-provider-select.sh"
+    "dns/dns-companion-manager.sh"
+    "router.sh"
+    "ports.sh"
+)
+
+for module in "${NETWORK_MODULES[@]}"; do
+    if ! source "${DOCKER_SCRIPTS_DIR}/modules/network/${module}"; then
+        print_status "Failed to load network module: ${module}" "error"
+        exit 1
+    fi
+done
+
+# Verify minimum required version of core modules
+if ! verify_core_version "1.0.0"; then
+    print_status "Core modules version mismatch" "error"
+    exit 1
+fi
+
+print_status "All imports loaded successfully" "success"
 verify_imports() {
     local required_vars=(
         "DOCKER_BASE_DIR"     # from path.sh

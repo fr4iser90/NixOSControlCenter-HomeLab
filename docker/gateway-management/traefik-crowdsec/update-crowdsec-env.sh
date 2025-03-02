@@ -2,7 +2,7 @@
 
 # Standard script setup - DO NOT MODIFY
 SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
-DOCKER_SCRIPTS_DIR="/home/docker/docker-scripts"
+
 
 # Source core imports
 source "${DOCKER_SCRIPTS_DIR}/lib/core/imports.sh"

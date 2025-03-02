@@ -1,6 +1,6 @@
 #!/bin/bash
 SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
-DOCKER_SCRIPTS_DIR="/home/docker/docker-scripts"
+
 
 source "${DOCKER_SCRIPTS_DIR}/lib/core/imports.sh"
 

@@ -6,17 +6,13 @@
 
 # Standard script setup - DO NOT MODIFY
 SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
-DOCKER_SCRIPTS_DIR="$(dirname "$SCRIPT_PATH")"
-
-# Debug output
-echo "Script path: $SCRIPT_PATH"
-echo "Script dir: $DOCKER_SCRIPTS_DIR"
-echo "Current dir: $(pwd)"
+DOCKER_SCRIPTS_DIR="$(dirname "$(dirname "$SCRIPT_PATH")")"
 
 # Verify script directory
 if [ ! -f "${DOCKER_SCRIPTS_DIR}/lib/core/imports.sh" ]; then
     echo "Error: Script directory structure invalid"
     echo "Expected: ${DOCKER_SCRIPTS_DIR}/lib/core/imports.sh"
+    echo "Current: ${DOCKER_SCRIPTS_DIR}"
     exit 1
 fi
 
@@ -25,6 +21,8 @@ source "${DOCKER_SCRIPTS_DIR}/lib/core/imports.sh"
 
 # Start with header and credential preference
 print_header "Homelab Setup"
+get_user_info
+get_homelab_domain
 ask_credential_preference
 
 # Prevent running as root
