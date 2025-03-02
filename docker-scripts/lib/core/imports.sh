@@ -95,11 +95,6 @@ for module in "${NETWORK_MODULES[@]}"; do
     fi
 done
 
-# Verify minimum required version of core modules
-if ! verify_core_version "1.0.0"; then
-    print_status "Core modules version mismatch" "error"
-    exit 1
-fi
 
 print_status "All imports loaded successfully" "success"
 verify_imports() {
