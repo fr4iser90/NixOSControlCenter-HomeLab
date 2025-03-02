@@ -2,7 +2,7 @@
 
 # Standard script setup - DO NOT MODIFY
 SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
-DOCKER_SCRIPTS_DIR="$(dirname "$SCRIPT_PATH")"
+DOCKER_SCRIPTS_DIR="$(dirname "$(dirname "$SCRIPT_PATH")")"
 
 source "${DOCKER_SCRIPTS_DIR}/lib/core/imports.sh"
 
