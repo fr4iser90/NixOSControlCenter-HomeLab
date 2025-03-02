@@ -6,9 +6,9 @@
 
 # Standard script setup - DO NOT MODIFY
 SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
-#DOCKER_SCRIPTS_DIR="$(dirname "$SCRIPT_PATH")"
 DOCKER_SCRIPTS_DIR="$(dirname "$(dirname "$SCRIPT_PATH")")"
 
+export DOCKER_SCRIPTS_DIR
 # Verify script directory
 if [ ! -f "${DOCKER_SCRIPTS_DIR}/lib/core/imports.sh" ]; then
     echo "Error: Script directory structure invalid"
@@ -68,7 +68,6 @@ if prompt_confirmation "Would you like to open your router configuration page no
 fi
 
 # Initialize security infrastructure
-print_status "Initializing security infrastructure..." "info"
 if ! initialize_gateway; then
     print_status "Failed to initialize security infrastructure" "error"
     exit 1
