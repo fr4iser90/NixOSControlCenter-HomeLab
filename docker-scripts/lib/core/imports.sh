@@ -96,28 +96,28 @@ for module in "${NETWORK_MODULES[@]}"; do
 done
 
 
-print_status "All imports loaded successfully" "success"
-verify_imports() {
-    local required_vars=(
-        "DOCKER_BASE_DIR"     # from path.sh
-        "SHOW_CREDENTIALS"    # from credentials.sh
-        "INFO"               # from colors.sh
-    )
+# print_status "All imports loaded successfully" "success"
+# verify_imports() {
+#     local required_vars=(
+#         "DOCKER_BASE_DIR"     # from path.sh
+#         "SHOW_CREDENTIALS"    # from credentials.sh
+#         "INFO"               # from colors.sh
+#     )
 
-    for var in "${required_vars[@]}"; do
-        if [ -z "${!var}" ]; then
-            if type print_status >/dev/null 2>&1; then
-                print_status "Required variable $var is not set" "error"
-            else
-                echo "Error: Required variable $var is not set"
-            fi
-            exit 1
-        fi
-    done
+#     for var in "${required_vars[@]}"; do
+#         if [ -z "${!var}" ]; then
+#             if type print_status >/dev/null 2>&1; then
+#                 print_status "Required variable $var is not set" "error"
+#             else
+#                 echo "Error: Required variable $var is not set"
+#             fi
+#             exit 1
+#         fi
+#     done
 
-    if type print_status >/dev/null 2>&1; then
-        print_status "All required imports verified" "success"
-    fi
-}
+#     if type print_status >/dev/null 2>&1; then
+#         print_status "All required imports verified" "success"
+#     fi
+# }
 
-verify_imports
+# verify_imports

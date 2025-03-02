@@ -8,7 +8,7 @@
 SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
 DOCKER_SCRIPTS_DIR="$(dirname "$(dirname "$SCRIPT_PATH")")"
 
-export DOCKER_SCRIPTS_DIR
+
 # Verify script directory
 if [ ! -f "${DOCKER_SCRIPTS_DIR}/lib/core/imports.sh" ]; then
     echo "Error: Script directory structure invalid"
