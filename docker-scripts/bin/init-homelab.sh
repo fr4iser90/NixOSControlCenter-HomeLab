@@ -6,6 +6,7 @@
 
 # Standard script setup - DO NOT MODIFY
 SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
+#DOCKER_SCRIPTS_DIR="$(dirname "$SCRIPT_PATH")"
 DOCKER_SCRIPTS_DIR="$(dirname "$(dirname "$SCRIPT_PATH")")"
 
 # Verify script directory
@@ -39,7 +40,6 @@ if ! groups | grep -q docker; then
     print_status "Then log out and back in" "info"
     exit 1
 fi
-
 # Initialize components
 print_header "Component Initialization"
 

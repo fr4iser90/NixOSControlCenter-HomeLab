@@ -8,10 +8,13 @@ _PATH_LOADED=1
 BASE_DIR="${HOME}"
 DOCKER_BASE_DIR="${BASE_DIR}/docker"         # Für Container
 DOCKER_LIB_DIR="${DOCKER_SCRIPTS_DIR}/lib"   # Für Libraries
+DOCKER_MODULES_DIR="${DOCKER_SCRIPTS_DIR}/modules"   # Für Modules
 
 # Export für andere Scripts
 export DOCKER_BASE_DIR
 export DOCKER_LIB_DIR
+export DOCKER_MODULES_DIR
+
 
 # Path helper functions
 get_docker_dir() {
@@ -31,14 +34,4 @@ get_docker_dir() {
     
     print_status "Container $container not found" "error"
     return 1
-}
-
-get_lib_file() {
-    local file=$1
-    echo "$DOCKER_LIB_DIR/$file"
-}
-
-get_script_file() {
-    local file=$1
-    echo "$DOCKER_SCRIPTS_DIR/$file"
 }

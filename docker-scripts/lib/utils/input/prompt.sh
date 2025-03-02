@@ -3,9 +3,9 @@ export TEST_MODE=1
 #export AUTO_SETUP=0
 # Zuerst die benötigten Funktionen laden
 source "${DOCKER_LIB_DIR}/utils/format/output.sh"
-source "${DOCKER_LIB_DIR}/utils/security/credentials-manager.sh"
 source "${DOCKER_LIB_DIR}/utils/system/string.sh"     
-source "${DOCKER_LIB_DIR}/utils/security/crypto.sh"
+source "${DOCKER_MODULES_DIR}/security/credentials-manager.sh"
+source "${DOCKER_MODULES_DIR}/security/crypto.sh"
 
 # Guard against multiple inclusion
 if [ -z "${_PROMPT_SH+x}" ]; then
