@@ -39,7 +39,7 @@ cd homelab-setup
 
 2. Run the setup script:
 ```bash
-./docker-scripts/bin/init-homelab.sh
+bash ./docker-scripts/bin/init-homelab.sh
 ```
 
 ## Available Services
