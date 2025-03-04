@@ -1,0 +1,53 @@
+services:
+  pufferpanel:
+    image: pufferpanel/pufferpanel:latest
+    container_name: pufferpanel
+    env_file:
+      - .env.pufferpanel
+    dns:
+      - 1.1.1.1
+    volumes:
+      - ./pufferpanel/data:/var/lib/pufferpanel
+      - ./pufferpanel/config:/etc/pufferpanel
+    networks:
+      - proxy
+    ports:
+#      - "8080:8080/tcp"  # PufferPanel Web Interface
+      - "5657:5657/tcp"   # PufferPanel Daemon
+    labels:
+      # Basis-Konfiguration
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      
+      # Router Konfiguration
+      - "traefik.http.routers.pufferpanel.entrypoints=websecure"
+      - "traefik.http.routers.pufferpanel.rule=Host(`pufferpanel.$DOMAIN`)"
+      - "traefik.http.routers.pufferpanel.tls=true"
+      - "traefik.http.routers.pufferpanel.tls.certresolver=http_resolver"
+      
+      # Service Konfiguration
+      - "traefik.http.services.pufferpanel.loadbalancer.server.port=8080"
+      
+      # Middleware Chain - ANGEPASST für PufferPanel
+      - "traefik.http.routers.pufferpanel.middlewares=default@file" #,admin-whitelist@file"
+      
+      # Sticky Sessions für PufferPanel
+      - "traefik.http.services.pufferpanel.loadbalancer.sticky.cookie.httpOnly=true"
+      - "traefik.http.services.pufferpanel.loadbalancer.sticky.cookie.secure=true"
+
+      - "traefik.tcp.routers.pufferpanel-daemon.entrypoints=games"
+      - "traefik.tcp.routers.pufferpanel-daemon.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.pufferpanel-daemon.service=pufferpanel-daemon"
+      - "traefik.tcp.services.pufferpanel-daemon.loadbalancer.server.port=5657"
+    restart: unless-stopped
+
+
+
+networks:
+  proxy:
+    external: true
+
+volumes:
+  db_data:
+  data:
+
