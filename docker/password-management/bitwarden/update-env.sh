@@ -61,7 +61,7 @@ store_service_credentials "$SERVICE_NAME" "$username" "$admin_password"
 # Define environment variables
 new_values=(
     "ADMIN_TOKEN:$ADMIN_TOKEN_ESCAPED"
-    "DOMAIN:https://bw.$DOMAIN"
+    "DOMAIN:https://bitwarden.$DOMAIN"
     "WEBSOCKET_ENABLED:true"
     "PUID:$USER_UID"
     "PGID:$USER_GID"
